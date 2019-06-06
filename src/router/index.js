@@ -8,9 +8,10 @@ export default new VueRouter({
       path: '/todo',
       component: () => import('../views/Todo.vue')
     },
-    //   path: '/page2',
-    //   component: () => import('../views/Page2.vue')
-    // },
+    {
+      path: '/card',
+      component: () => import('../views/Card.vue')
+    },
     {
       path: '*',
       redirect: '/todo'

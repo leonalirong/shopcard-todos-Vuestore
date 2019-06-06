@@ -5,11 +5,19 @@ Vue.use(Vuex)
 
 const state = {
   inputVal: '',
-  todos: []
+  todos: [],
+  goods: [], // 商品数据
+  cards: []
 }
 
 const getters = {
-
+  cardTotal (state) {
+    let total = 0
+    state.cards.forEach(item => {
+      total += item.nums * item.price
+    })
+    return total
+  }
 }
 
 const mutations = {
@@ -31,6 +39,18 @@ const mutations = {
     // state.todos.splice(index, 1)
     let index = state.todos.findIndex(item => item.id === payload)
     state.todos.splice(index, 1)
+  },
+  setGoods (state, goods) {
+    state.goods = goods
+  },
+  addCard (state, good) {
+    let id = good.id
+    let index = state.cards.findIndex(good => good.id === id)
+    if (index >= 0) {
+      state.cards[index].nums += 1
+    } else {
+      state.cards.push({ ...good, nums: 1 })
+    }
   }
 }
 
@@ -83,8 +103,16 @@ const actions = {
           commit('initTodo', newTodos)
         })
     }, 2000)
-  }
+  },
 
+  getGoods ({ commit }) {
+    fetch('http://localhost:3000/goods')
+      .then(response => response.json())
+      .then(res => {
+        console.log(res)
+        commit('setGoods', res)
+      })
+  }
 }
 
 export default new Vuex.Store({
